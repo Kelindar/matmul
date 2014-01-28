@@ -11,7 +11,7 @@ Matmul Benchmark has been developed originally by Roman Atachiants at the School
 
 ![matrix multiply](img/ParallelIJK.png)
 
-![matrix multiply](img/ParallelKJI.png)
+![matrix multiply](img/ParallelKIJ.png)
 
 License
 =======
