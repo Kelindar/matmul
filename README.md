@@ -5,7 +5,13 @@ This benchmark suite contains different implementations of matrix multiplication
 
 Matmul Benchmark has been developed originally by Roman Atachiants at the School of Computer Science & Statistics at Trinity College Dublin as part of research conducted at The Irish Software Engineering Research Centre (LERO), supported by Science Foundation Ireland (SFI).
 
-![matrix multiply](http://i.msdn.microsoft.com/dynimg/IC572398.png)
+![matrix multiply](img/SequentialKJI.png)
+
+![matrix multiply](img/ParallelKJI.png)
+
+![matrix multiply](img/ParallelIJK.png)
+
+![matrix multiply](img/ParallelKJI.png)
 
 License
 =======
