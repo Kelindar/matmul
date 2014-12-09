@@ -271,7 +271,7 @@ void Parallel_KJI(int n, int** a, int** b, int** c){
 }
 
 
-int main() {
+int main2() {
 	// The size of matrices A, B and C is the same
 	int size = 1000;
 
@@ -282,6 +282,7 @@ int main() {
 	// Allocate Matrix C
 	int** C = CreateMatrix(size, size);
 
+	std::cout << "/!\ If you want to also measure hardware counters, make sure to run this in low priority (see start.bat)" << std::endl;
 	std::cout << "Press any key to start...";
 	getchar();
 	
@@ -306,4 +307,26 @@ int main() {
 	// Exit
 	std::cout << "Press any key to exit...";
 	getchar();
+}
+
+
+int main() {
+	// The size of matrices A, B and C is the same
+	int size = 1000;
+
+	// Read Matrix A and B
+	int** A = ReadMatrix("A.bin", size, size);
+	int** B = ReadMatrix("B.bin", size, size);
+
+	// Allocate Matrix C
+	int** C = CreateMatrix(size, size);
+
+
+	Parallel_IJK(size, A, B, C);
+
+	//Parallel_KIJ(size, A, B, C);
+
+	//Parallel_KJI(size, A, B, C);
+
+
 }
