@@ -76,9 +76,14 @@
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
     </Link>
+    <PreBuildEvent>
+      <Command> mc -um $(ProjectName).man -h $(ProjectDir)  -z $(ProjectName)</Command>
+    </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="account.h" />
     <ClInclude Include="matmul.h" />
+    <ClInclude Include="matrix.h" />
     <ClInclude Include="particle.h" />
     <ClInclude Include="resource.h" />
     <ClInclude Include="sort.h" />
@@ -96,6 +101,10 @@
       <FileType>Document</FileType>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">false</ExcludedFromBuild>
     </Text>
+    <Text Include="Readme.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Matmul.man" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Matmul.rc" />

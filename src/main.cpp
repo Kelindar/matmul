@@ -1,13 +1,22 @@
 #include "stdafx.h"
-#include "matmul.h"
+#include "matrix.h"
+#include "account.h"
 #include "sort.h"
 #include "particle.h"
 
-int main() {
-	int size = 1000000;
-	//Sequential_ParticleSystem::test(size);
-	Parallel_ParticleSystem::test(size);
+int wmain(int argc, wchar_t *argv[]) {
+	// Register this program with the ETW system as a provider.
+	ULONG result;
+	result = EventRegisterHarvester(); 
 
+	int size = 1000000;
+	
+	AccountA::test(size);
+	//AccountB::test(size);
+
+	// Unregister ETW provider
+	result = EventUnregisterHarvester();
+	return (0);
 }
 
 /*int main() {

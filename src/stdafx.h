@@ -7,7 +7,10 @@
 
 #include "targetver.h"
 
+#include <windows.h>
+#include <evntprov.h>
 #include <stdio.h>
+#include <conio.h>
 #include <tchar.h>
 #include <ppl.h>
 #include <ppltasks.h>
@@ -17,6 +20,7 @@
 #include <iterator>
 #include <vector>
 #include <ctime>
+#include "matmul.h"
 
 using namespace concurrency;
 

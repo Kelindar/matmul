@@ -148,3 +148,6 @@ $RECYCLE.BIN/
 
 # Mac crap
 .DS_Store
+src/MatmulTEMP.BIN
+src/Matmul_MSG00001.bin
+src/RCa09436

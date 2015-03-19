@@ -1,40 +1,43 @@
-========================================================================
-    CONSOLE APPLICATION : Toy.Matmul Project Overview
-========================================================================
+Run Steps:
+==========
+1. Install the .man file as a provider on the machine where the app will execute.
+   You may want to do this when the application is installed:
 
-AppWizard has created this Toy.Matmul application for you.
+   wevtutil im project.man
+   NOTE:  must be an admin to do this!!!
 
-This file contains a summary of what you will find in each of the files that
-make up your Toy.Matmul application.
+2. Start the session for the application
 
+   logman start -ets project -p "Provider Name From Manifest" 0 0 -o projectlog.etl
+   NOTE:  must be an admin to do this!!!
 
-Toy.Matmul.vcxproj
-    This is the main project file for VC++ projects generated using an Application Wizard.
-    It contains information about the version of Visual C++ that generated the file, and
-    information about the platforms, configurations, and project features selected with the
-    Application Wizard.
+3. Run the application:
 
-Toy.Matmul.vcxproj.filters
-    This is the filters file for VC++ projects generated using an Application Wizard. 
-    It contains information about the association between the files in your project 
-    and the filters. This association is used in the IDE to show grouping of files with
-    similar extensions under a specific node (for e.g. ".cpp" files are associated with the
-    "Source Files" filter).
+   project.exe
 
-Toy.Matmul.cpp
-    This is the main application source file.
+4. Stop the logging session:
 
-/////////////////////////////////////////////////////////////////////////////
-Other standard files:
+   logman stop -ets project  
+   NOTE:  must be an admin to do this!!!
 
-StdAfx.h, StdAfx.cpp
-    These files are used to build a precompiled header (PCH) file
-    named Toy.Matmul.pch and a precompiled types file named StdAfx.obj.
+5. project.etl will contain the trace in binary format.  Convert it to text on the 
+   machine where the .man file is installed.  i.e. the machine where the app ran
+   or a separate local machine which also has the .man file installed:
 
-/////////////////////////////////////////////////////////////////////////////
-Other notes:
+   tracerpt -y project.etl            -- to generate an XML file report
+   tracerpt -y -of CSV project.etl    -- to generate a CSV file report
+   OR XPERF ????
 
-AppWizard uses "TODO:" comments to indicate parts of the source code you
-should add to or customize.
+   This produces an XML or CSV file which contains all the trace data for the application.
 
-/////////////////////////////////////////////////////////////////////////////
+6. Remove the .man file as a provider when it's no longer needed, such as during
+   application uninstall.
+
+   wevtutil um project.man
+   NOTE:  must be an admin to do this!!!
+
+Resources:
+http://blogs.microsoft.co.il/blogs/sasha/archive/2008/03/15/xperf-windows-performance-toolkit.aspx
+http://blogs.msdn.com/pigscanfly/archive/2009/08/06/stack-walking-in-xperf.aspx
+http://social.msdn.microsoft.com/Forums/en-US/etw/thread/a1aa1350-41a0-4490-9ae3-9b4520aeb9d4  (FAQ)
+http://windowsclient.net/wpf/white-papers/event-tracing-wpf.aspx

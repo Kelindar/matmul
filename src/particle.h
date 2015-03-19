@@ -6,25 +6,9 @@
 //------------------------------------------------------------------------------------
 // AoS Version
 //------------------------------------------------------------------------------------
-struct Particle
-{
-	// Position
-	float x;
-	float y;
-	float z;
-	float w;
-
-	// Velocity
-	float vx;
-	float vy;
-	float vz;
-	float vw;
-
-	// Color
-	float r;
-	float g;
-	float b;
-	float a;
+struct Particle {
+	float x, y, z, w;
+	float vx, vy, vz, vw;
 };
 
 struct Sequential_ParticleSystem
