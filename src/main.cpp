@@ -3,20 +3,60 @@
 #include "account.h"
 #include "sort.h"
 #include "particle.h"
+#include "phase.h"
+
+void account();
+void particle();
+void matrix();
+void phase();
 
 int wmain(int argc, wchar_t *argv[]) {
 	// Register this program with the ETW system as a provider.
 	ULONG result;
 	result = EventRegisterHarvester(); 
 
-	int size = 1000000;
-	
-	AccountA::test(size);
-	//AccountB::test(size);
+	// account();
+	// particle();
+	phase();
 
 	// Unregister ETW provider
 	result = EventUnregisterHarvester();
 	return (0);
+}
+
+// Accounts benchmark
+void account(){
+	AccountA::test(1000000);
+	//AccountB::test(1000000);
+}
+
+// Particle benchmark
+void particle(){
+	//Sequential_ParticleSystem::test(1000000);
+	Parallel_ParticleSystem::test(1000000);
+}
+
+// Phase benchmark
+void phase(){
+	int size = 50000000;
+	//auto v = ReadVector("A.bin", size);
+	//PhaseA::test(v);
+
+	auto v = ReadVectorF("A.bin", size);
+	PhaseB::test(v);
+}
+
+
+// Matmul benchmark
+void matrix(){
+	int size = 1000;
+	int** A = ReadMatrix("A.bin", size, size);
+	int** B = ReadMatrix("B.bin", size, size);
+	int** C = CreateMatrix(size, size);
+
+	//Parallel_IJK(size, A, B, C);
+	Parallel_KIJ(size, A, B, C);
+	//Parallel_KJI(size, A, B, C);
 }
 
 /*int main() {
@@ -27,52 +67,3 @@ int wmain(int argc, wchar_t *argv[]) {
 	Parallel_MergeSort(v.begin(), v.end());
 	//Sequential_MergeSort(v.begin(), v.end());
 }*/
-
-/*int main() {
-	int size = 1000;
-	int** A = ReadMatrix("A.bin", size, size);
-	int** B = ReadMatrix("B.bin", size, size);
-	int** C = CreateMatrix(size, size);
-
-	Parallel_IJK(size, A, B, C);
-	//Parallel_KIJ(size, A, B, C);
-	//Parallel_KJI(size, A, B, C);
-}*/
-
-/*
-int main() {
-	// The size of matrices A, B and C is the same
-	int size = 1000;
-
-	// Read Matrix A and B
-	int** A = ReadMatrix("A.bin", size, size);
-	int** B = ReadMatrix("B.bin", size, size);
-
-	// Allocate Matrix C
-	int** C = CreateMatrix(size, size);
-
-	std::cout << "/!\ If you want to also measure hardware counters, make sure to run this in low priority (see start.bat)" << std::endl;
-	std::cout << "Press any key to start...";
-	getchar();
-
-	// Multiply sequentially
-	Sequential_IJK(size, A, B, C);
-	Sequential_JIK(size, A, B, C);
-	Sequential_KIJ(size, A, B, C);
-	Sequential_IKJ(size, A, B, C);
-	Sequential_JKI(size, A, B, C);
-	Sequential_KJI(size, A, B, C);
-	//
-	//// Multiply in parallel
-	Parallel_IJK(size, A, B, C);
-	Parallel_JIK(size, A, B, C);
-	Parallel_KIJ(size, A, B, C);
-	Parallel_IKJ(size, A, B, C);
-	Parallel_JKI(size, A, B, C);
-	Parallel_KJI(size, A, B, C);
-
-	// Exit
-	std::cout << "Press any key to exit...";
-	getchar();
-}
-*/

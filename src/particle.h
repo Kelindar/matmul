@@ -49,10 +49,13 @@ struct Sequential_ParticleSystem
 			
 		std::cout << "Sequential ParticleSystem... ";
 		clock_t t0 = clock();
+		EventWriteBegin();
+		{
+			for (int t = 0; t < 500; ++t)
+				system.update(0.16666);
 
-		for (int t = 0; t < 500; ++t)
-			system.update(0.16666);
-
+		}
+		EventWriteEnd();
 		clock_t t1 = clock();
 		std::cout << "Time : " << (double)(t1 - t0) / CLOCKS_PER_SEC << "\n";
 	}
@@ -95,10 +98,13 @@ struct Parallel_ParticleSystem
 
 		std::cout << "Parallel ParticleSystem... ";
 		clock_t t0 = clock();
+		EventWriteBegin();
+		{
+			for (int t = 0; t < 500; ++t)
+				system.update(0.16666);
 
-		for (int t = 0; t < 500; ++t)
-			system.update(0.16666);
-
+		}
+		EventWriteEnd();
 		clock_t t1 = clock();
 		std::cout << "Time : " << (double)(t1 - t0) / CLOCKS_PER_SEC << "\n";
 	}

@@ -189,16 +189,19 @@ void Parallel_KIJ(int n, int** a, int** b, int** c){
 	// Begin measurement
 	std::cout << "Parallel KIJ Multiply... ";
 	clock_t t0 = clock();
-
-	parallel_for(0, n, [&](int k)
+	EventWriteBegin();
 	{
-		for (int i = 0; i<n; i++) {
-			int r = a[i][k];
-			for (int j = 0; j<n; j++)
-				c[i][j] += r * b[k][j];
-		}
-	});
+		parallel_for(0, n, [&](int k)
+		{
+			for (int i = 0; i < n; i++) {
+				int r = a[i][k];
+				for (int j = 0; j < n; j++)
+					c[i][j] += r * b[k][j];
+			}
+		});
 
+	}
+	EventWriteEnd();
 	// End measurement
 	clock_t t1 = clock();
 	std::cout << "Time : " << (double)(t1 - t0) / CLOCKS_PER_SEC << "\n";
@@ -257,16 +260,19 @@ void Parallel_KJI(int n, int** a, int** b, int** c){
 	// Begin measurement
 	std::cout << "Parallel KJI Multiply... ";
 	clock_t t0 = clock();
-
-	parallel_for(0, n, [&](int k)
+	EventWriteBegin();
 	{
-		for (int j = 0; j<n; j++) {
-			int r = b[k][j];
-			for (int i = 0; i<n; i++)
-				c[i][j] += a[i][k] * r;
-		}
-	});
 
+		parallel_for(0, n, [&](int k)
+		{
+			for (int j = 0; j < n; j++) {
+				int r = b[k][j];
+				for (int i = 0; i < n; i++)
+					c[i][j] += a[i][k] * r;
+			}
+		});
+	}
+	EventWriteEnd();
 	// End measurement
 	clock_t t1 = clock();
 	std::cout << "Time : " << (double)(t1 - t0) / CLOCKS_PER_SEC << "\n";

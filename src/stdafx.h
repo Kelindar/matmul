@@ -44,3 +44,4 @@ int** CreateMatrix(int sizeX, int sizeY);
 * Reads a vector from a file.
 */
 std::vector<int> ReadVector(const char* filename, int size);
+std::vector<float> ReadVectorF(const char* filename, int size);

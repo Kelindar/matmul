@@ -34,6 +34,9 @@
     <ClInclude Include="stdafx.h">
       <Filter>Tracing</Filter>
     </ClInclude>
+    <ClInclude Include="phase.h">
+      <Filter>Algorithms</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Text Include="..\start.bat" />

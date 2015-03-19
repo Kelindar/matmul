@@ -44,6 +44,25 @@ std::vector<int> ReadVector(const char* filename, int size)
 /**
 * Reads a matrix from a file.
 */
+std::vector<float> ReadVectorF(const char* filename, int size)
+{
+	auto buffer = new int[size];
+	FILE *file = fopen(filename, "rb");
+
+	// Read everything
+	fread(buffer, sizeof(int), size, file);
+
+	// Push to a vector
+	std::vector<float> v;
+	for (int i = 0; i < size; ++i)
+		v.push_back((float)buffer[i]);
+
+	return v;
+};
+
+/**
+* Reads a matrix from a file.
+*/
 int** ReadMatrix(const char* filename, int sizeX, int sizeY)
 {
 	// Allocate a new matrix of the required size
