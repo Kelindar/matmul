@@ -37,6 +37,9 @@
     <ClInclude Include="phase.h">
       <Filter>Algorithms</Filter>
     </ClInclude>
+    <ClInclude Include="sum.h">
+      <Filter>Algorithms</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Text Include="..\start.bat" />

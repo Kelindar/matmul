@@ -4,11 +4,13 @@
 #include "sort.h"
 #include "particle.h"
 #include "phase.h"
+#include "sum.h"
 
 void account();
 void particle();
 void matrix();
 void phase();
+void sum();
 
 int wmain(int argc, wchar_t *argv[]) {
 	// Register this program with the ETW system as a provider.
@@ -17,7 +19,8 @@ int wmain(int argc, wchar_t *argv[]) {
 
 	// account();
 	// particle();
-	phase();
+	//phase();
+	sum();
 
 	// Unregister ETW provider
 	result = EventUnregisterHarvester();
@@ -57,6 +60,12 @@ void matrix(){
 	//Parallel_IJK(size, A, B, C);
 	Parallel_KIJ(size, A, B, C);
 	//Parallel_KJI(size, A, B, C);
+}
+
+void sum(){
+	int iterations = 100000000;
+	//Sum_Local(iterations);
+	Sum_Remote(iterations);
 }
 
 /*int main() {
