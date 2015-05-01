@@ -148,6 +148,7 @@
     </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="badcache.h" />
     <ClInclude Include="sum.h" />
     <ClInclude Include="account.h" />
     <ClInclude Include="matmul.h" />

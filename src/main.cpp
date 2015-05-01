@@ -5,12 +5,14 @@
 #include "particle.h"
 #include "phase.h"
 #include "sum.h"
+#include "badcache.h"
 
 void account();
 void particle();
 void matrix();
 void phase();
 void sum();
+void badcache();
 
 int wmain(int argc, wchar_t *argv[]) {
 	// Register this program with the ETW system as a provider.
@@ -20,7 +22,8 @@ int wmain(int argc, wchar_t *argv[]) {
 	// account();
 	// particle();
 	//phase();
-	sum();
+	//sum();
+	badcache();
 
 	// Unregister ETW provider
 	result = EventUnregisterHarvester();
@@ -66,6 +69,12 @@ void sum(){
 	int iterations = 100000000;
 	//Sum_Local(iterations);
 	Sum_Remote(iterations);
+}
+
+void badcache(){
+	//To run with a memory - region size of 1024 ints and 20000 iterations:
+	//bad-cache 10 20
+	BadCache(10000, 500000);
 }
 
 /*int main() {
