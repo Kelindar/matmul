@@ -6,6 +6,7 @@
 #include "phase.h"
 #include "sum.h"
 #include "badcache.h"
+#include "philosopher.h"
 
 void account();
 void particle();
@@ -23,7 +24,8 @@ int wmain(int argc, wchar_t *argv[]) {
 	// particle();
 	//phase();
 	//sum();
-	badcache();
+	//badcache();
+	philosopher(45);
 
 	// Unregister ETW provider
 	result = EventUnregisterHarvester();
@@ -45,13 +47,12 @@ void particle(){
 // Phase benchmark
 void phase(){
 	int size = 50000000;
-	//auto v = ReadVector("A.bin", size);
-	//PhaseA::test(v);
+	auto vi = ReadVector("A.bin", size);
+	PhaseA::test(vi);
 
-	auto v = ReadVectorF("A.bin", size);
-	PhaseB::test(v);
+	auto vf = ReadVectorF("A.bin", size);
+	PhaseB::test(vf);
 }
-
 
 // Matmul benchmark
 void matrix(){

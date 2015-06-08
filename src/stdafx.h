@@ -20,7 +20,20 @@
 #include <iterator>
 #include <vector>
 #include <ctime>
+#include <chrono>
+#include <memory>
+#include <mutex>
+#include <string>
+#include <thread>
 #include "matmul.h"
+
+#if defined(_MSC_VER) || defined(__BORLANDC__)
+typedef unsigned __int64 ulong64;
+typedef signed __int64 long64;
+#else
+typedef unsigned long long ulong64;
+typedef signed long long long64;
+#endif
 
 using namespace concurrency;
 
@@ -45,3 +58,7 @@ int** CreateMatrix(int sizeX, int sizeY);
 */
 std::vector<int> ReadVector(const char* filename, int size);
 std::vector<float> ReadVectorF(const char* filename, int size);
+
+
+void my_lock(std::mutex &m);
+void my_lock(std::mutex &m1, std::mutex &m2);

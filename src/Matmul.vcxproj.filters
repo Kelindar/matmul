@@ -43,6 +43,9 @@
     <ClInclude Include="badcache.h">
       <Filter>Algorithms</Filter>
     </ClInclude>
+    <ClInclude Include="philosopher.h">
+      <Filter>Algorithms</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Text Include="..\start.bat" />

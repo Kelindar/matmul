@@ -215,7 +215,7 @@ Remarks:
 #endif
 #endif // MCGEN_DISABLE_PROVIDER_CODE_GENERATION
 //+
-// Provider Harvester Event Count 2
+// Provider Harvester Event Count 4
 //+
 EXTERN_C __declspec(selectany) const GUID HARVESTER_PROVIDER = {0xfe2625c1, 0xc10d, 0x452c, {0xb8, 0x13, 0xa8, 0x70, 0x3e, 0xa9, 0xd2, 0xba}};
 
@@ -230,6 +230,8 @@ EXTERN_C __declspec(selectany) const GUID HARVESTER_PROVIDER = {0xfe2625c1, 0xc1
 //
 #define ALLOCATE_OPCODE 0xa
 #define FREE_OPCODE 0xb
+#define LOCK_SUCCESS_OPCODE 0xc
+#define LOCK_FAILURE_OPCODE 0xd
 
 //
 // Event Descriptors
@@ -238,6 +240,10 @@ EXTERN_C __declspec(selectany) const EVENT_DESCRIPTOR Begin = {0x1, 0x1, 0x10, 0
 #define Begin_value 0x1
 EXTERN_C __declspec(selectany) const EVENT_DESCRIPTOR End = {0x2, 0x1, 0x10, 0x4, 0xb, 0x0, 0x8000000000000000};
 #define End_value 0x2
+EXTERN_C __declspec(selectany) const EVENT_DESCRIPTOR Success = {0x3, 0x1, 0x10, 0x4, 0xc, 0x0, 0x8000000000000000};
+#define Success_value 0x3
+EXTERN_C __declspec(selectany) const EVENT_DESCRIPTOR Failure = {0x4, 0x1, 0x10, 0x4, 0xd, 0x0, 0x8000000000000000};
+#define Failure_value 0x4
 
 //
 // Note on Generate Code from Manifest Windows Vista and above
@@ -394,6 +400,34 @@ Remarks:
         TemplateEventDescriptor(HarvesterHandle, &End)\
         : ERROR_SUCCESS\
 
+//
+// Enablement check macro for Success
+//
+
+#define EventEnabledSuccess() ((HarvesterEnableBits[0] & 0x00000001) != 0)
+
+//
+// Event Macro for Success
+//
+#define EventWriteSuccess(Lock0, Lock1)\
+        EventEnabledSuccess() ?\
+        Template_xx(HarvesterHandle, &Success, Lock0, Lock1)\
+        : ERROR_SUCCESS\
+
+//
+// Enablement check macro for Failure
+//
+
+#define EventEnabledFailure() ((HarvesterEnableBits[0] & 0x00000001) != 0)
+
+//
+// Event Macro for Failure
+//
+#define EventWriteFailure(Lock0, Lock1)\
+        EventEnabledFailure() ?\
+        Template_xx(HarvesterHandle, &Failure, Lock0, Lock1)\
+        : ERROR_SUCCESS\
+
 #endif // MCGEN_DISABLE_PROVIDER_CODE_GENERATION
 
 
@@ -423,6 +457,32 @@ TemplateEventDescriptor(
 }
 #endif
 
+//
+//Template from manifest : t2
+//
+#ifndef Template_xx_def
+#define Template_xx_def
+ETW_INLINE
+ULONG
+Template_xx(
+    _In_ REGHANDLE RegHandle,
+    _In_ PCEVENT_DESCRIPTOR Descriptor,
+    _In_ unsigned __int64  _Arg0,
+    _In_ unsigned __int64  _Arg1
+    )
+{
+#define ARGUMENT_COUNT_xx 2
+
+    EVENT_DATA_DESCRIPTOR EventData[ARGUMENT_COUNT_xx];
+
+    EventDataDescCreate(&EventData[0], &_Arg0, sizeof(unsigned __int64)  );
+
+    EventDataDescCreate(&EventData[1], &_Arg1, sizeof(unsigned __int64)  );
+
+    return EventWrite(RegHandle, Descriptor, ARGUMENT_COUNT_xx, EventData);
+}
+#endif
+
 #endif // MCGEN_DISABLE_PROVIDER_CODE_GENERATION
 
 #if defined(__cplusplus)
@@ -432,3 +492,5 @@ TemplateEventDescriptor(
 #define MSG_level_Informational              0x50000004L
 #define MSG_Harvester_event_1_message        0xB0010001L
 #define MSG_Harvester_event_2_message        0xB0010002L
+#define MSG_Harvester_event_3_message        0xB0010003L
+#define MSG_Harvester_event_4_message        0xB0010004L

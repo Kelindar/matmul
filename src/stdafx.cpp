@@ -92,3 +92,43 @@ int** CreateMatrix(int sizeX, int sizeY)
 	}
 	return matrix;
 };
+
+void my_lock(std::mutex &m)
+{
+	if (m.try_lock()) {
+		// record that we got the lock first time
+		EventWriteSuccess((ulong64)&m, 0);
+	}
+	else {
+		// the lock was locked when we first tried
+		// so record the initial failure....
+		EventWriteFailure((ulong64)&m, 0);
+
+		//... and then wait by calling the regular
+		// lock routine.
+		m.lock();
+
+		// the lock was successfully acquired this time
+		EventWriteSuccess((ulong64)&m, 0);
+	}
+}
+
+void my_lock(std::mutex &m1, std::mutex &m2)
+{
+	if (std::try_lock(m1, m2)){
+		EventWriteSuccess((ulong64)&m1, (ulong64)&m2);
+	}
+	else 
+	{
+		// the lock was locked when we first tried
+		// so record the initial failure....
+		EventWriteFailure((ulong64)&m1, (ulong64)&m2);
+
+		//... and then wait by calling the regular
+		// lock routine.
+		std::lock(m1, m2);
+
+		// the lock was successfully acquired this time
+		EventWriteSuccess((ulong64)&m1, (ulong64)&m2);
+	}
+}
