@@ -7,6 +7,7 @@
 #include "sum.h"
 #include "badcache.h"
 #include "philosopher.h"
+#include "wqueue.h"
 
 void account();
 void particle();
@@ -25,7 +26,8 @@ int wmain(int argc, wchar_t *argv[]) {
 	//phase();
 	//sum();
 	//badcache();
-	philosopher(45);
+	//philosopher(45);
+	wqueue(100, 100);
 
 	// Unregister ETW provider
 	result = EventUnregisterHarvester();
@@ -77,6 +79,8 @@ void badcache(){
 	//bad-cache 10 20
 	BadCache(10000, 500000);
 }
+
+
 
 /*int main() {
 	// The size of the vector to read

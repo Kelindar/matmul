@@ -15,6 +15,8 @@
 #include <ppl.h>
 #include <ppltasks.h>
 #include <iostream>
+#include <deque>
+#include <condition_variable>
 #include <algorithm>
 #include <random>
 #include <iterator>
