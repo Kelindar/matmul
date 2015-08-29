@@ -62,5 +62,6 @@ std::vector<int> ReadVector(const char* filename, int size);
 std::vector<float> ReadVectorF(const char* filename, int size);
 
 
+bool my_try_lock(std::mutex &m);
 void my_lock(std::mutex &m);
-void my_lock(std::mutex &m1, std::mutex &m2);
+void my_unlock(std::mutex &m);

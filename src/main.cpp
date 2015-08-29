@@ -27,7 +27,8 @@ int wmain(int argc, wchar_t *argv[]) {
 	//sum();
 	//badcache();
 	//philosopher(45);
-	wqueue(100, 100);
+	philosopher(45);
+	//wqueue(100, 100);
 
 	// Unregister ETW provider
 	result = EventUnregisterHarvester();

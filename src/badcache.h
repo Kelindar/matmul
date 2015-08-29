@@ -24,7 +24,7 @@ To run with a memory-region size of 1024 ints and 20000 iterations:
 int * allocate_array(int size)
 {
 	int * result = (int*)malloc(sizeof(int) * size);
-	assert(result != NULL);
+	//assert(result != NULL);
 	return result;
 }
 

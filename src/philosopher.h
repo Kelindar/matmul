@@ -16,6 +16,8 @@ using std::string;
 using std::thread;
 using std::unique_ptr;
 using std::vector;
+using std::srand;
+
 
 class Chopstick
 {
@@ -26,31 +28,47 @@ public:
 
 int philosopher(int numPhilosophers)
 {
+
+
 	auto eat = [](Chopstick* leftChopstick, Chopstick* rightChopstick, int philosopherNumber, int leftChopstickNumber, int rightChopstickNumber)
 	{
 		if (leftChopstick == rightChopstick)
 			throw exception("Left and right chopsticks should not be the same!");
 
-		my_lock(leftChopstick->m, rightChopstick->m);				// ensures there are no deadlocks
+		while (true) {
+			if (my_try_lock(leftChopstick->m)) {
+				if (my_try_lock(rightChopstick->m)) {
 
-		lock_guard<mutex> a(leftChopstick->m, adopt_lock);
-		string sl = "   Philosopher " + to_string(philosopherNumber) + " picked " + to_string(leftChopstickNumber) + " chopstick.\n";
-		cout << sl.c_str();
+					string sr = "   Philosopher " + to_string(philosopherNumber) + " picked chopsticks " + to_string(leftChopstickNumber) + " and " + to_string(rightChopstickNumber) + ".\n";
+					cout << sr.c_str();
+					break;
+				}
+				else {
+					my_unlock(leftChopstick->m);
+				}
+			}
 
-		lock_guard<mutex> b(rightChopstick->m, adopt_lock);
-		string sr = "   Philosopher " + to_string(philosopherNumber) + " picked " + to_string(rightChopstickNumber) + " chopstick.\n";
-		cout << sr.c_str();
+			std::chrono::milliseconds timeout(10);
+			std::this_thread::sleep_for(timeout);
+		}
 
-		string pe = "Philosopher " + to_string(philosopherNumber) + " eats.\n";
-		cout << pe;
 
 		std::chrono::milliseconds timeout(500);
+		string sr = "   Philosopher " + to_string(philosopherNumber) + " eating for " + to_string(timeout.count()) + " milliseconds ...\n";
+		cout << sr.c_str();
+
 		std::this_thread::sleep_for(timeout);
+
+		my_unlock(leftChopstick->m);
+		my_unlock(rightChopstick->m);
+
+		
 	};
+
 	EventWriteBegin();
 	{
 
-		// 5 utencils on the left and right of each philosopher. Use them to acquire locks.
+		// utencils on the left and right of each philosopher. Use them to acquire locks.
 		vector< unique_ptr<Chopstick> > chopsticks(numPhilosophers);
 
 		for (int i = 0; i < numPhilosophers; ++i)
@@ -63,8 +81,8 @@ int philosopher(int numPhilosophers)
 		vector<thread> tasks(numPhilosophers);
 
 		tasks[0] = thread(eat,
-			chopsticks[0].get(),						// left chopstick:  #1
-			chopsticks[numPhilosophers - 1].get(),		// right chopstick: #5
+			chopsticks[0].get(),						// left chopstick
+			chopsticks[numPhilosophers - 1].get(),		// right chopstick
 			0 + 1,										// philosopher number
 			1,
 			numPhilosophers
