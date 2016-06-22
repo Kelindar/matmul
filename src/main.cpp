@@ -8,6 +8,7 @@
 #include "badcache.h"
 #include "philosopher.h"
 #include "wqueue.h"
+#include "david.h"
 
 void account();
 void particle();
@@ -15,6 +16,7 @@ void matrix();
 void phase();
 void sum();
 void badcache();
+void david();
 
 int wmain(int argc, wchar_t *argv[]) {
 	// Register this program with the ETW system as a provider.
@@ -22,13 +24,15 @@ int wmain(int argc, wchar_t *argv[]) {
 	result = EventRegisterHarvester(); 
 
 	// account();
-	// particle();
+	//particle();
 	//phase();
 	//sum();
 	//badcache();
 	//philosopher(45);
-	philosopher(45);
+	//philosopher(12);
 	//wqueue(100, 100);
+	//matrix();
+	david(100, 100, 100, 100, 2, 2);
 
 	// Unregister ETW provider
 	result = EventUnregisterHarvester();
@@ -43,8 +47,8 @@ void account(){
 
 // Particle benchmark
 void particle(){
-	//Sequential_ParticleSystem::test(1000000);
-	Parallel_ParticleSystem::test(1000000);
+	Sequential_ParticleSystem::test(1000000);
+	//Parallel_ParticleSystem::test(1000000);
 }
 
 // Phase benchmark
@@ -59,7 +63,7 @@ void phase(){
 
 // Matmul benchmark
 void matrix(){
-	int size = 1000;
+	int size = 1024;
 	int** A = ReadMatrix("A.bin", size, size);
 	int** B = ReadMatrix("B.bin", size, size);
 	int** C = CreateMatrix(size, size);

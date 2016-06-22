@@ -49,6 +49,9 @@
     <ClInclude Include="wqueue.h">
       <Filter>Algorithms</Filter>
     </ClInclude>
+    <ClInclude Include="david.h">
+      <Filter>Algorithms</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Text Include="..\start.bat" />
