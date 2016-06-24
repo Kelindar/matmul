@@ -16,6 +16,8 @@ void matrix();
 void phase();
 void sum();
 void badcache();
+void mergeP();
+void mergeS();
 void david();
 
 int wmain(int argc, wchar_t *argv[]) {
@@ -23,7 +25,7 @@ int wmain(int argc, wchar_t *argv[]) {
 	ULONG result;
 	result = EventRegisterHarvester(); 
 
-	// account();
+	//account();
 	//particle();
 	//phase();
 	//sum();
@@ -32,7 +34,8 @@ int wmain(int argc, wchar_t *argv[]) {
 	//philosopher(12);
 	//wqueue(100, 100);
 	//matrix();
-	david(100, 100, 100, 100, 2, 2);
+	david(1000, 100, 100, 1000, 7, 500);
+	//mergeP();
 
 	// Unregister ETW provider
 	result = EventUnregisterHarvester();
@@ -53,7 +56,7 @@ void particle(){
 
 // Phase benchmark
 void phase(){
-	int size = 50000000;
+	int size = 1024;
 	auto vi = ReadVector("A.bin", size);
 	PhaseA::test(vi);
 
@@ -85,13 +88,16 @@ void badcache(){
 	BadCache(10000, 500000);
 }
 
-
-
-/*int main() {
-	// The size of the vector to read
-	int size = 5000000;
+void mergeP() {
+	int size = 1024;
 	auto v = ReadVector("A.bin", size);
-	
+
 	Parallel_MergeSort(v.begin(), v.end());
-	//Sequential_MergeSort(v.begin(), v.end());
-}*/
+}
+
+void mergeS() {
+	int size = 1024;
+	auto v = ReadVector("A.bin", size);
+
+	Sequential_MergeSort(v.begin(), v.end());
+}

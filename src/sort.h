@@ -11,9 +11,11 @@ void merge(In b, In m, In e) { // this is the merger, doing the important job
 	std::vector<typename In::value_type> left(b, m);
 	std::vector<typename In::value_type> right(m, e);
 
+	double max = DBL_MAX;
+
 	// guards for the two ranges
-	left.push_back(std::numeric_limits<typename In::value_type>::max());
-	right.push_back(std::numeric_limits<typename In::value_type>::max());
+	left.push_back((typename In::value_type)max);
+	right.push_back((typename In::value_type)max);
 
 	auto itl = std::begin(left);
 	auto itr = std::begin(right);

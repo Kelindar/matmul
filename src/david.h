@@ -209,7 +209,10 @@ void worker(double ** A, double ** B, double ** C, int a_dim1, int a_dim2, int b
 	while (!pool->empty()) {
 		pool->lock();
 		pool->pop(start, end);
+		/*std::cout << "\nLocked region - (" << start << ", " << end << ")";
+		fflush(stdout);*/
 		pool->unlock();
+		
 		parallel_matmul_loop(A, B, C, a_dim1, a_dim2, b_dim2, start, end);
 	}
 }
@@ -220,12 +223,12 @@ void workq_matmul(double ** A, double ** B, double ** C, int a_dim1, int a_dim2,
 	thread *threads = new thread[nthreads];
 	workq pool(npartitions);
 	int i;
-	int increment = a_dim1 / nthreads;
+	int increment = a_dim1 / npartitions;
 	int start = 0;
 	int end = increment;
 
 	// partition the work into chunks 0..npartitions-2
-	for (i = 0; i < nthreads - 1; i++) {
+	for (i = 0; i < npartitions - 2; i++) {
 		//parallel_matmul_loop(A, B, C, a_dim1, a_dim2, b_dim2, start, end);
 		//threads[i] = thread(parallel_matmul_loop, A, B, C, a_dim1, a_dim2,
 		//		       b_dim2, start, end);
