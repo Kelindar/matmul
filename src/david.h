@@ -151,11 +151,11 @@ void matmul(double ** A, double ** B, double ** C, int a_dim1, int a_dim2, int b
 
 /* a routine that does a subset of the outer loop iterations, so that it
 can be invoked multiple times for different parts of the matrix */
-void parallel_matmul_loop(double ** A, double ** B, double ** C, int a_dim1, int a_dim2, int b_dim2, int outer_start, int outer_end)
+void parallel_matmul_loop(double ** A, double ** B, double ** C, int a_dim1, int a_dim2, int b_dim2, int outer_start, int outer_end, int stride)
 {
 	int i, j, k;
 
-	for (i = outer_start; i < outer_end; i++) {
+	for (i = outer_start; i < outer_end; i+=stride) {
 		for (j = 0; j < b_dim2; j++) {
 			double sum = 0.0;
 			for (k = 0; k < a_dim2; k++) {
@@ -213,7 +213,7 @@ void worker(double ** A, double ** B, double ** C, int a_dim1, int a_dim2, int b
 		fflush(stdout);*/
 		pool->unlock();
 		
-		parallel_matmul_loop(A, B, C, a_dim1, a_dim2, b_dim2, start, end);
+		parallel_matmul_loop(A, B, C, a_dim1, a_dim2, b_dim2, start, end, 1);
 	}
 }
 
@@ -252,19 +252,20 @@ void workq_matmul(double ** A, double ** B, double ** C, int a_dim1, int a_dim2,
 }
 
 /* the parallel version of matmul */
-void parallel_matmul(double ** A, double ** B, double ** C, int a_dim1, int a_dim2, int b_dim2, int nthreads, int unbalanced)
+void parallel_matmul(double ** A, double ** B, double ** C, int a_dim1, int a_dim2, int b_dim2, int nthreads, int unbalanced, int interleaved)
 {
 	thread *threads = new thread[nthreads];
 	int i;
 	int increment = a_dim1 / nthreads;
 	int start = 0;
 	int end = increment;
+	int stride = interleaved ? nthreads : 1;
 
 	// start threads 0..nthreads-2
 	for (i = 0; i < nthreads - 1; i++) {
 		//parallel_matmul_loop(A, B, C, a_dim1, a_dim2, b_dim2, start, end);
 		threads[i] = thread(parallel_matmul_loop, A, B, C, a_dim1, a_dim2,
-			b_dim2, start, end);
+			b_dim2, start, end, stride);
 		start = end;
 		end = end + increment;
 		if (unbalanced) {
@@ -273,7 +274,7 @@ void parallel_matmul(double ** A, double ** B, double ** C, int a_dim1, int a_di
 	}
 	// start the last thread to deal with odd-sized leftover using the
 	// main thread
-	parallel_matmul_loop(A, B, C, a_dim1, a_dim2, b_dim2, start, a_dim1);
+	parallel_matmul_loop(A, B, C, a_dim1, a_dim2, b_dim2, start, a_dim1, 1);
 
 
 	// wait for all the threads to complete
@@ -291,7 +292,7 @@ int david(int a_dim1, int a_dim2, int b_dim1, int b_dim2, int nthreads, int npar
 	//int nthreads, npartitions;
 	//struct timeval start_time;
 	//struct timeval stop_time;
-	bool unbalanced;
+	bool unbalanced, interleaved;
 
 	//if (argc != 7) {
 	//	// fprintf(stderr, "Usage: matmul-harness <A nrows> <A ncols> <B nrows> <B ncols> <nthreads> <workq entries>\n");
@@ -334,8 +335,9 @@ int david(int a_dim1, int a_dim2, int b_dim1, int b_dim2, int nthreads, int npar
 
 		/* perform matrix multiplication */
 		if (npartitions <= 0) {
-			unbalanced = npartitions < 0;
-			parallel_matmul(A, B, C, a_dim1, a_dim2, b_dim2, nthreads, unbalanced);
+			unbalanced = npartitions == -1;
+			interleaved = npartitions == -2;
+			parallel_matmul(A, B, C, a_dim1, a_dim2, b_dim2, nthreads, unbalanced, interleaved);
 		}
 		else {
 			workq_matmul(A, B, C, a_dim1, a_dim2, b_dim2, nthreads, npartitions);

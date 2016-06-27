@@ -21,6 +21,7 @@
 #include <random>
 #include <iterator>
 #include <vector>
+#include <list>
 #include <ctime>
 #include <chrono>
 #include <memory>

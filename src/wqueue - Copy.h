@@ -122,6 +122,7 @@ void wqueue(int p, int c) {
 			std::thread(&Consumer::run, &tc)
 			);
 	}
+
 		
 	for (int i = 0; i < c; ++i){
 		consumers[i].join();

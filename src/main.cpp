@@ -31,10 +31,21 @@ int wmain(int argc, wchar_t *argv[]) {
 	//sum();
 	//badcache();
 	//philosopher(45);
-	//philosopher(12);
-	//wqueue(100, 100);
+
+
+	//****************
+	//philosopher_eat_method = _USE_KETCHUP;
+	//int numberOfPhilosophers = 4, numberOfRounds = 5, base = 500, variance = 1;
+	//int numberOfPhilosophers = 12, numberOfRounds=10, base = 200, variance = 1000;
+
+	/*philosopher_eat_method = _USE_TOUCH_RANDOM_PARTS_OF_ARRAY;
+	int numberOfPhilosophers = 4, numberOfRounds = 8, sizeOfArray = 10000, touchSize = 7500;
+
+	philosopher(numberOfPhilosophers, numberOfRounds, sizeOfArray, touchSize);*/
+	//****************
+	//wqueue(2, 2);
 	//matrix();
-	david(1000, 100, 100, 1000, 7, 500);
+	david(250, 2500, 2500, 500, 200, 2000);
 	//mergeP();
 
 	// Unregister ETW provider
